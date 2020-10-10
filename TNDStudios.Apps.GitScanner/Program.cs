@@ -57,7 +57,8 @@ namespace TNDStudios.Apps.GitScanner
 
                     foreach (var packageReference in scanResult.Packages)
                     {
-                        Console.WriteLine($"{packageReference.Include}, version {packageReference.Version}");
+#warning TODO: Run Threat analysis here!                       
+                        //Console.WriteLine($"{packageReference.Include}, version {packageReference.Version}");
                     }
                 }
 
