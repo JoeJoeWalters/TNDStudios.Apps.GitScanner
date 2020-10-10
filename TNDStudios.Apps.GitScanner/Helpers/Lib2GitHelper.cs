@@ -9,7 +9,7 @@ namespace TNDStudios.Apps.GitScanner.Helpers
     /// https://edi.wang/post/2019/3/26/operate-git-with-net-core
     /// https://github.com/libgit2/libgit2sharp/
     /// </summary>
-    public class Lib2GitHelper : IGitHelper
+    public class Lib2GitHelper : GitHelperBase, IGitHelper
     {
         private UsernamePasswordCredentials _credentials;
 
@@ -31,7 +31,7 @@ namespace TNDStudios.Apps.GitScanner.Helpers
         {
             if (overwrite)
             {
-                Directory.Delete(localPath, true);
+                DeleteDirectory(localPath); // Special recursive delete which succeeds where the system one fails
             }
 
             var co = new CloneOptions();

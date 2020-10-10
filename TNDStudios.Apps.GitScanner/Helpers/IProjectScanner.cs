@@ -9,12 +9,6 @@ namespace TNDStudios.Apps.GitScanner.Helpers
         public List<PackageReference> Packages { get; set; }
     }
 
-    public class PackageReference
-    {
-        public string Include { get; set; }
-        public Version Version { get; set; }
-    }
-
     public interface IProjectScanner
     {
         public ProjectScannerResult Scan(string content);

@@ -16,6 +16,7 @@ namespace TNDStudios.Apps.GitScanner.Helpers
             result.Packages = doc.XPathSelectElements("//PackageReference")
                 .Select(pr => new PackageReference
                 {
+                    Type = PackageReferenceType.Nuget,
                     Include = pr.Attribute("Include").Value,
                     Version = new Version(pr.Attribute("Version").Value)
                 }).ToList();

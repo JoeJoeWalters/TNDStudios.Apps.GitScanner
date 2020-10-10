@@ -9,6 +9,7 @@ using TNDStudios.Apps.GitScanner.Helpers;
 namespace TNDStudios.Apps.GitScanner
 {
     /// <summary>
+    /// https://ossindex.sonatype.org/rest
     /// https://github.com/sonatype-nexus-community/audit.net/blob/master/src/NugetAuditor/NugetAuditor.Lib/OSSIndex/Vulnerability.cs
     /// https://ossindex.sonatype.org/component/pkg:nuget/Harmony.Infrastructure.netcoreapp3.1
     /// https://nvd.nist.gov/vuln/data-feeds
@@ -32,13 +33,15 @@ namespace TNDStudios.Apps.GitScanner
             var serviceProvider = new ServiceCollection()
                 .AddLogging()
                 .AddSingleton<IConfiguration>(configuration)
-                .AddTransient<IGitHelper, Lib2GitHelper>()
+                .AddSingleton<IGitHelper>(new Lib2GitHelper())
+                .AddSingleton<IThreatAssessor>(new OSSThreatAssessor(configuration["SonaType::UserName"], configuration["SonaType::APIToken"]))
                 .BuildServiceProvider();
 
             string userName = configuration["Git::UserName"];
             string password = configuration["Git::Password"];
             String[] repositoriesToScan = { "https://github.com/TNDStudios/TNDStudios.Azure.FunctionApp.git" };
 
+            IThreatAssessor threatAssessor = serviceProvider.GetRequiredService<IThreatAssessor>();
             IGitHelper gitHelper = serviceProvider.GetRequiredService<IGitHelper>();
             gitHelper.Connect(userName, password);
 
@@ -57,8 +60,7 @@ namespace TNDStudios.Apps.GitScanner
 
                     foreach (var packageReference in scanResult.Packages)
                     {
-#warning TODO: Run Threat analysis here!                       
-                        //Console.WriteLine($"{packageReference.Include}, version {packageReference.Version}");
+                        ThreatAssessment assessment = threatAssessor.Assess(packageReference);
                     }
                 }
 
