@@ -8,6 +8,13 @@ using TNDStudios.Apps.GitScanner.Helpers;
 
 namespace TNDStudios.Apps.GitScanner
 {
+    /// <summary>
+    /// https://github.com/sonatype-nexus-community/audit.net/blob/master/src/NugetAuditor/NugetAuditor.Lib/OSSIndex/Vulnerability.cs
+    /// https://ossindex.sonatype.org/component/pkg:nuget/Harmony.Infrastructure.netcoreapp3.1
+    /// https://nvd.nist.gov/vuln/data-feeds
+    /// owasp.org/index.php/OWASP_Dependency_Check – paj28 Oct 23 '15 at 13:57
+    /// NuGetDefense 
+    /// </summary>
     class Program
     {
         static IConfigurationRoot configuration;
@@ -40,7 +47,6 @@ namespace TNDStudios.Apps.GitScanner
                 string localPath = @"c:\temp";
                 gitHelper.Clone(repositoryUrl, localPath, true);
                 List<string> commits = gitHelper.History(localPath);
-
             }
         }
     }
