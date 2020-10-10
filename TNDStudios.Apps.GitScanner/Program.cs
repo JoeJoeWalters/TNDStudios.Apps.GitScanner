@@ -42,11 +42,25 @@ namespace TNDStudios.Apps.GitScanner
             IGitHelper gitHelper = serviceProvider.GetRequiredService<IGitHelper>();
             gitHelper.Connect(userName, password);
 
-            foreach(string repositoryUrl in repositoriesToScan)
+            foreach (string repositoryUrl in repositoriesToScan)
             {
                 string localPath = @"c:\temp";
                 gitHelper.Clone(repositoryUrl, localPath, true);
                 List<string> commits = gitHelper.History(localPath);
+
+                string[] projectFiles = Directory.GetFiles(localPath, "*.csproj", new EnumerationOptions() { RecurseSubdirectories = true, MatchCasing = MatchCasing.CaseInsensitive });
+
+                foreach (string projectFile in projectFiles)
+                {
+                    IProjectScanner projectScanner = ProjectScannerFactory.Get(projectFile);
+                    ProjectScannerResult scanResult = projectScanner.Scan(File.ReadAllText(projectFile));
+
+                    foreach (var packageReference in scanResult.Packages)
+                    {
+                        Console.WriteLine($"{packageReference.Include}, version {packageReference.Version}");
+                    }
+                }
+
             }
         }
     }
