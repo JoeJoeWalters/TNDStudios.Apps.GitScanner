@@ -1,19 +1,10 @@
-﻿using System;
+﻿using LibGit2Sharp;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using LibGit2Sharp;
 
 namespace TNDStudios.Apps.GitScanner.Helpers
 {
-    public interface IGitHelper
-    {
-        void Connect(string userName, string password);
-        void Clone(string remote, string localPath, bool overwrite);
-        List<string> History(string localPath);
-    }
-
     /// <summary>
     /// https://edi.wang/post/2019/3/26/operate-git-with-net-core
     /// https://github.com/libgit2/libgit2sharp/
