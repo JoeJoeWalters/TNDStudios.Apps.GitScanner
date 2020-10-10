@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using TNDStudios.Apps.GitScanner.Helpers;
 
@@ -36,7 +37,10 @@ namespace TNDStudios.Apps.GitScanner
 
             foreach(string repositoryUrl in repositoriesToScan)
             {
-                gitHelper.Clone(repositoryUrl, @"c:\temp");
+                string localPath = @"c:\temp";
+                gitHelper.Clone(repositoryUrl, localPath, true);
+                List<string> commits = gitHelper.History(localPath);
+
             }
         }
     }
