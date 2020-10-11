@@ -110,6 +110,8 @@ namespace TNDStudios.Apps.GitScanner.Helpers.ThreatAssessment
         private const string _responseContentType = "application/vnd.ossindex.component-report.v1+json";
         private const string _requestContentType = "application/vnd.ossindex.component-report-request.v1+json";
 
+        public bool CanSave => false;
+
         public OSSThreatAssessor(string userName, string token)
         {
             _userName = userName;
@@ -143,6 +145,11 @@ namespace TNDStudios.Apps.GitScanner.Helpers.ThreatAssessment
                 OSSComponentReport componentReport = JsonSerializer.Deserialize<OSSComponentReport>(response, new JsonSerializerOptions());
             }
             return new ThreatAssessment() { };
+        }
+
+        public bool Save(ThreatAssessment threatAssessment)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using TNDStudios.Apps.GitScanner.Helpers;
 using TNDStudios.Apps.GitScanner.Helpers.Git;
 using TNDStudios.Apps.GitScanner.Helpers.Scanners;
@@ -33,13 +34,16 @@ namespace TNDStudios.Apps.GitScanner
                 .AddLogging()
                 .AddSingleton<IConfiguration>(configuration)
                 .AddSingleton<IGitHelper>(new Lib2GitHelper())
-                .AddSingleton<IThreatAssessor>(new OSSThreatAssessor(configuration["SonaType::UserName"], configuration["SonaType::APIToken"]))
                 .AddSingleton<IGitRepositoryReporter>(new GitHubRepositoryReporter(gitToken))
                 .BuildServiceProvider();
 
             List<string> repositoriesToScan = (serviceProvider.GetRequiredService<IGitRepositoryReporter>()).List();
+            List<IThreatAssessor> threatAssessors = new List<IThreatAssessor>()
+            {
+                new CachedThreatAssessor(),
+                new OSSThreatAssessor(configuration["SonaType::UserName"], configuration["SonaType::APIToken"])
+            };
 
-            IThreatAssessor threatAssessor = serviceProvider.GetRequiredService<IThreatAssessor>();
             IGitHelper gitHelper = serviceProvider.GetRequiredService<IGitHelper>();
             gitHelper.Connect(userName, password);
 
@@ -58,7 +62,24 @@ namespace TNDStudios.Apps.GitScanner
 
                     foreach (var packageReference in scanResult.Packages)
                     {
-                        ThreatAssessment assessment = threatAssessor.Assess(packageReference);
+                        ThreatAssessment assessment = null;
+                        foreach (IThreatAssessor threatAssessor in threatAssessors)
+                        { 
+                            assessment = threatAssessor.Assess(packageReference);
+                            if (assessment != null)
+                                break;
+                        }
+
+                        if (assessment != null)
+                        {
+                            // Cache to any assessor that allows caching
+                            foreach (IThreatAssessor threatAssessor in threatAssessors.Where(thr => thr.CanSave))
+                            {
+                                threatAssessor.Save(assessment);
+                            }
+
+
+                        }
                     }
                 }
 

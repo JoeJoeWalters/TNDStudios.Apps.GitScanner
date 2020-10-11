@@ -12,6 +12,9 @@ namespace TNDStudios.Apps.GitScanner.Helpers.ThreatAssessment
 
     public interface IThreatAssessor
     {
+        bool CanSave { get; }
+
         ThreatAssessment Assess(PackageReference packageReference);
+        bool Save(ThreatAssessment threatAssessment);
     }
 }
