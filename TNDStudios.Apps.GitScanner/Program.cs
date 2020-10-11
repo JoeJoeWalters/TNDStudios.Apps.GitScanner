@@ -26,6 +26,7 @@ namespace TNDStudios.Apps.GitScanner
 
             string userName = configuration["Git::UserName"];
             string password = configuration["Git::Password"];
+            string gitToken = configuration["Git::Token"];
 
             // DI
             var serviceProvider = new ServiceCollection()
@@ -33,7 +34,7 @@ namespace TNDStudios.Apps.GitScanner
                 .AddSingleton<IConfiguration>(configuration)
                 .AddSingleton<IGitHelper>(new Lib2GitHelper())
                 .AddSingleton<IThreatAssessor>(new OSSThreatAssessor(configuration["SonaType::UserName"], configuration["SonaType::APIToken"]))
-                .AddSingleton<IGitRepositoryReporter>(new GitHubRepositoryReporter(userName, password))
+                .AddSingleton<IGitRepositoryReporter>(new GitHubRepositoryReporter(gitToken))
                 .BuildServiceProvider();
 
             List<string> repositoriesToScan = (serviceProvider.GetRequiredService<IGitRepositoryReporter>()).List();
@@ -57,7 +58,7 @@ namespace TNDStudios.Apps.GitScanner
 
                     foreach (var packageReference in scanResult.Packages)
                     {
-                        //ThreatAssessment assessment = threatAssessor.Assess(packageReference);
+                        ThreatAssessment assessment = threatAssessor.Assess(packageReference);
                     }
                 }
 

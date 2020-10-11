@@ -9,43 +9,11 @@ using System.Text.Json.Serialization;
 
 namespace TNDStudios.Apps.GitScanner.Helpers.Git
 {
-    public class GitHubRepository
-    {
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-
-        [JsonPropertyName("private")]
-        public bool Private { get; set; }
-
-        [JsonPropertyName("html_url")]
-        public string HtmlUrl { get; set; }
-
-        [JsonPropertyName("description")]
-        public string Description { get; set; }
-
-        [JsonPropertyName("fork")]
-        public bool Fork { get; set; }
-
-        [JsonPropertyName("created_at")]
-        public DateTime Created { get; set; }
-
-        [JsonPropertyName("updated_at")]
-        public DateTime Updated { get; set; }
-
-        [JsonPropertyName("pushed_at")]
-        public DateTime Pushed { get; set; }
-
-        [JsonPropertyName("default_branch")]
-        public DateTime DefaultBranch { get; set; }
-    }
-
     public class GitHubRepositoryReporter : IGitRepositoryReporter
     {
         private readonly string _userName;
         private readonly string _password;
+        private readonly string _token;
 
         public GitHubRepositoryReporter(string userName, string password)
         {
@@ -53,16 +21,26 @@ namespace TNDStudios.Apps.GitScanner.Helpers.Git
             _password = password;
         }
 
+        public GitHubRepositoryReporter(string token)
+        {
+            _token = token;
+        }
+
         public List<string> List()
         {
+            Credentials credentials = 
+                String.IsNullOrEmpty(_token) ? 
+                new Credentials(_userName, _password) : 
+                new Credentials(_token);
+
             IGitHubClient client = 
                 new GitHubClient(
                     new ProductHeaderValue("TNDStudios.Apps.GitScanner")) 
                 { 
-                    Credentials = new Credentials(_userName, _password) 
+                    Credentials = credentials
                 };
 
-            return client.Repository.GetAllForUser(_userName).Result.Select(repo => repo.CloneUrl).ToList();
+            return client.Repository.GetAllForCurrent().Result.Select(repo => repo.CloneUrl).ToList();
         }
     }
 }
