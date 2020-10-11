@@ -18,12 +18,14 @@ namespace TNDStudios.Apps.GitScanner.Helpers.Git
             {
                 DeleteDirectory(subDirectory);
             }
+
             foreach (var file in Directory.EnumerateFiles(directory))
             {
                 var fileInfo = new FileInfo(file);
                 fileInfo.Attributes = FileAttributes.Normal;
                 fileInfo.Delete();
             }
+
             Directory.Delete(directory);
         }
     }

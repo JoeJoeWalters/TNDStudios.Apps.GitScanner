@@ -24,17 +24,19 @@ namespace TNDStudios.Apps.GitScanner
                 .AddEnvironmentVariables()
                 .Build();
 
+            string userName = configuration["Git::UserName"];
+            string password = configuration["Git::Password"];
+
             // DI
             var serviceProvider = new ServiceCollection()
                 .AddLogging()
                 .AddSingleton<IConfiguration>(configuration)
                 .AddSingleton<IGitHelper>(new Lib2GitHelper())
                 .AddSingleton<IThreatAssessor>(new OSSThreatAssessor(configuration["SonaType::UserName"], configuration["SonaType::APIToken"]))
+                .AddSingleton<IGitRepositoryReporter>(new GitHubRepositoryReporter(userName, password))
                 .BuildServiceProvider();
 
-            string userName = configuration["Git::UserName"];
-            string password = configuration["Git::Password"];
-            String[] repositoriesToScan = { "https://github.com/TNDStudios/TNDStudios.Azure.FunctionApp.git" };
+            List<string> repositoriesToScan = (serviceProvider.GetRequiredService<IGitRepositoryReporter>()).List();
 
             IThreatAssessor threatAssessor = serviceProvider.GetRequiredService<IThreatAssessor>();
             IGitHelper gitHelper = serviceProvider.GetRequiredService<IGitHelper>();
@@ -55,7 +57,7 @@ namespace TNDStudios.Apps.GitScanner
 
                     foreach (var packageReference in scanResult.Packages)
                     {
-                        ThreatAssessment assessment = threatAssessor.Assess(packageReference);
+                        //ThreatAssessment assessment = threatAssessor.Assess(packageReference);
                     }
                 }
 
