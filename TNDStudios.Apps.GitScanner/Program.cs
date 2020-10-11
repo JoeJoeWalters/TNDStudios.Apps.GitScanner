@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using TNDStudios.Apps.GitScanner.Helpers;
+using TNDStudios.Apps.GitScanner.Helpers.Git;
+using TNDStudios.Apps.GitScanner.Helpers.Scanners;
+using TNDStudios.Apps.GitScanner.Helpers.ThreatAssessment;
 
 namespace TNDStudios.Apps.GitScanner
 {

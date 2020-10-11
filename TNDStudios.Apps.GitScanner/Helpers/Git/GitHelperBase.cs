@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace TNDStudios.Apps.GitScanner.Helpers
+namespace TNDStudios.Apps.GitScanner.Helpers.Git
 {
     public class GitHelperBase
     {

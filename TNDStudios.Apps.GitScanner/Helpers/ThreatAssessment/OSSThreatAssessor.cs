@@ -5,8 +5,9 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using TNDStudios.Apps.GitScanner.Objects;
 
-namespace TNDStudios.Apps.GitScanner.Helpers
+namespace TNDStudios.Apps.GitScanner.Helpers.ThreatAssessment
 {
     public class OSSComponentReportRequest
     {

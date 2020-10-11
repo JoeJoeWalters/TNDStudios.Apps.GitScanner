@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace TNDStudios.Apps.GitScanner.Helpers
+namespace TNDStudios.Apps.GitScanner.Helpers.Git
 {
-    /// <summary>
-    /// https://edi.wang/post/2019/3/26/operate-git-with-net-core
-    /// https://github.com/libgit2/libgit2sharp/
-    /// </summary>
     public class Lib2GitHelper : GitHelperBase, IGitHelper
     {
         private UsernamePasswordCredentials _credentials;

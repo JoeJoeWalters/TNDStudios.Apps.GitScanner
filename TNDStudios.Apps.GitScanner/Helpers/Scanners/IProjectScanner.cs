@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using TNDStudios.Apps.GitScanner.Objects;
 
-namespace TNDStudios.Apps.GitScanner.Helpers
+namespace TNDStudios.Apps.GitScanner.Helpers.Scanners
 {
     public class ProjectScannerResult
     {

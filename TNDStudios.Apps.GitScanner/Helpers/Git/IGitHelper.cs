@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TNDStudios.Apps.GitScanner.Helpers
+namespace TNDStudios.Apps.GitScanner.Helpers.Git
 {
     public interface IGitHelper
     {
